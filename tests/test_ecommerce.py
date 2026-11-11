@@ -101,17 +101,23 @@ def test_invalid_json(tmp_path: Path) -> None:
     assert Category.category_count == Category.product_count == 0
 
 
-@pytest.mark.parametrize("answer, expected_price", [("y", 800), ("n", 180000.0)])
-def test_homework_main(capsys, monkeypatch, answer, expected_price):
-    monkeypatch.setattr("builtins.input", lambda prompt: answer)
+def test_homework_main(capsys):
     path = Path(__file__).resolve().parents[1] / "main.py"
     namespace = runpy.run_path(str(path), run_name="__main__")
-    output = capsys.readouterr().out
-    assert "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт." in output
-    assert output.count("Цена не должна быть нулевая или отрицательная") == 2
-    assert namespace["new_product"].price == expected_price
+    lines = capsys.readouterr().out.splitlines()
+    assert lines[0] == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
+    assert "Смартфоны, количество продуктов: 27 шт." in lines
+    assert "2580000.0" in lines
+    assert "1334000.0" in lines
+    assert "2114000.0" in lines
+    assert lines[-3:] == [
+        "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт.",
+        "Iphone 15, 210000.0 руб. Остаток: 8 шт.",
+        "Xiaomi Redmi Note 11, 31000.0 руб. Остаток: 14 шт.",
+    ]
     assert Category.category_count == 1
-    assert Category.product_count == 4
+    assert Category.product_count == 3
+    assert namespace["category1"].name == "Смартфоны"
 
 
 def test_category_private_list_and_copy(product):
