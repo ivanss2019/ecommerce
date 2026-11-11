@@ -1,4 +1,4 @@
-"""Категории товаров с приватным списком и общими счётчиками."""
+"""Категории товаров с приватным списком, общими счётчиками и итератором."""
 
 from typing import ClassVar, List
 
@@ -28,7 +28,37 @@ class Category:
     @property
     def products(self) -> str:
         """Возвращает по одной строке на товар; пустая категория — пустая строка."""
-        return "".join(
-            f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n"
-            for product in self.__products
-        )
+        return "".join(f"{product}\n" for product in self.__products)
+
+    @property
+    def product_list(self) -> List[Product]:
+        """Возвращает копию списка товаров; изменение копии категорию не меняет."""
+        return list(self.__products)
+
+    def __str__(self) -> str:
+        """Строка вида «Название, количество продуктов: 200 шт.» (сумма остатков)."""
+        total = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total} шт."
+
+
+class CategoryIterator:
+    """Перебирает товары одной категории, например в цикле for."""
+
+    def __init__(self, category: Category) -> None:
+        self.category = category
+        self._items = category.product_list
+        self._index = 0
+
+    def __iter__(self) -> "CategoryIterator":
+        """Начинает перебор заново по актуальному списку товаров категории."""
+        self._items = self.category.product_list
+        self._index = 0
+        return self
+
+    def __next__(self) -> Product:
+        """Возвращает очередной товар; по окончании поднимает StopIteration."""
+        if self._index >= len(self._items):
+            raise StopIteration
+        product = self._items[self._index]
+        self._index += 1
+        return product

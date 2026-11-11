@@ -33,6 +33,20 @@ class Product:
                 return
         self.__price = value
 
+    def __str__(self) -> str:
+        """Строка вида «Название, 80 руб. Остаток: 15 шт.»."""
+        return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other: object) -> float:
+        """Возвращает суммарную стоимость остатков двух товаров на складе.
+
+        Для не-Product возвращает NotImplemented, и Python сам поднимает
+        TypeError вместо молчаливого неверного результата.
+        """
+        if not isinstance(other, Product):
+            return NotImplemented
+        return self.price * self.quantity + other.price * other.quantity
+
     @classmethod
     def new_product(
         cls: Type[ProductType],
