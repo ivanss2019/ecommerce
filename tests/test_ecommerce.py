@@ -103,21 +103,16 @@ def test_invalid_json(tmp_path: Path) -> None:
 
 def test_homework_main(capsys):
     path = Path(__file__).resolve().parents[1] / "main.py"
-    namespace = runpy.run_path(str(path), run_name="__main__")
+    runpy.run_path(str(path), run_name="__main__")
     lines = capsys.readouterr().out.splitlines()
-    assert lines[0] == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
-    assert "Смартфоны, количество продуктов: 27 шт." in lines
+    assert lines[0] == "Samsung Galaxy S23 Ultra"
     assert "2580000.0" in lines
-    assert "1334000.0" in lines
-    assert "2114000.0" in lines
-    assert lines[-3:] == [
-        "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт.",
-        "Iphone 15, 210000.0 руб. Остаток: 8 шт.",
-        "Xiaomi Redmi Note 11, 31000.0 руб. Остаток: 14 шт.",
-    ]
-    assert Category.category_count == 1
-    assert Category.product_count == 3
-    assert namespace["category1"].name == "Смартфоны"
+    assert "16750.0" in lines
+    assert "Возникла ошибка TypeError при попытке сложения" in lines
+    assert lines[-2] == "5"
+    assert lines[-1] == "Возникла ошибка TypeError при добавлении не продукта"
+    assert Category.category_count == 2
+    assert Category.product_count == 5
 
 
 def test_category_private_list_and_copy(product):
