@@ -28,7 +28,15 @@ class Category:
     @property
     def products(self) -> str:
         """Возвращает по одной строке на товар; пустая категория — пустая строка."""
-        return "".join(
-            f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт.\n"
-            for product in self.__products
-        )
+        return "".join(f"{product}\n" for product in self.__products)
+
+    @property
+    def product_list(self) -> List[Product]:
+        """Возвращает копию списка товаров; изменение копии категорию не меняет."""
+        return list(self.__products)
+
+    def __str__(self) -> str:
+        """Строка вида «Название, количество продуктов: 200 шт.» (сумма остатков)."""
+        total = sum(product.quantity for product in self.__products)
+        return f"{self.name}, количество продуктов: {total} шт."
+
