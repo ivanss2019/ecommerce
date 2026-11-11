@@ -22,3 +22,13 @@
 - Дополнительное задание: `CategoryIterator` с `__iter__` и `__next__`.
 - 51 тест пройден; покрытие 100% (102 исполняемые строки). Отчёты: htmlcov/index.html и coverage.xml.
 - Black, isort, Flake8 и mypy: проверки пройдены.
+
+# Проверка задания 16.1
+
+- Задание 1: классы `Smartphone` (`efficiency`, `model`, `memory`, `color`) и `LawnGrass` (`country`, `germination_period`, `color`) наследуют `Product`.
+- Задание 2: `Product.__add__` сравнивает `type(self)` и `type(other)`; разные классы, в том числе базовый `Product` и наследник, дают `TypeError`.
+- Задание 3: `Category.add_product` принимает только `Product` и его наследников (`isinstance`), остальное — `TypeError`.
+- Задание 4: тесты в `tests/test_inheritance.py`; прежние тесты проходят, `test_homework_main` обновлён под новый `main.py`.
+- 72 теста пройдены; покрытие 98,8% (166 исполняемых строк, не покрыты две ветки `else` в `main.py`, которые не должны выполняться). Отчёты: htmlcov/index.html и coverage.xml.
+- Black, isort, Flake8 и mypy: проверки пройдены.
+- `htmlcov/` содержит собственный `.gitignore` с `*`, поэтому новые файлы отчёта добавляются командой `git add -f htmlcov`.
