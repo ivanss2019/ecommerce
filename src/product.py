@@ -37,14 +37,14 @@ class Product:
         """Строка вида «Название, 80 руб. Остаток: 15 шт.»."""
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
-    def __add__(self, other: object) -> float:
+    def __add__(self, other: "Product") -> float:
         """Возвращает суммарную стоимость остатков двух товаров на складе.
 
-        Для не-Product возвращает NotImplemented, и Python сам поднимает
-        TypeError вместо молчаливого неверного результата.
+        Складывать можно только товары одного класса: сравнение через type()
+        не даёт сложить смартфон с травой или с базовым Product. Иначе TypeError.
         """
-        if not isinstance(other, Product):
-            return NotImplemented
+        if type(self) is not type(other):
+            raise TypeError("Складывать можно только товары одного класса")
         return self.price * self.quantity + other.price * other.quantity
 
     @classmethod
